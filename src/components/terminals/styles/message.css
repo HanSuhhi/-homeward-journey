@@ -1,0 +1,7 @@
+.message-game-title {
+  font-size: 44px;
+}
+
+.message-matter-end {
+  margin-bottom: var(--mini);
+}

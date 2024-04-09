@@ -1,0 +1,18 @@
+.matter {
+  /* padding: var(--base-margin); */
+}
+
+.matter-title {
+  padding-bottom: 0;
+}
+
+.matter-console {
+  margin-left: var(--normal);
+  margin-bottom: calc(var(--base-margin) * 2);
+  padding: var(--small);
+}
+
+.matter-bg {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: var(--base-margin);
+}

@@ -1,0 +1,9 @@
+.text-main {
+  color: var(--yellow-bright-2);
+}
+
+.text-command {
+  margin-right: var(--small);
+  color: var(--white-deep-2);
+  text-decoration: underline;
+}
