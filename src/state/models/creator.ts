@@ -15,7 +15,9 @@ function useOnEnter() {
 }
 
 function useHelps() {
-  const helps: Help[] = commonHelps;
+  const helps: Help[] = [
+    ...commonHelps,
+  ];
 
   const setHelp = (help: Help) => {
     helps.push(help);
@@ -29,7 +31,6 @@ function craeteDefaultState() {
   const { helps, setHelp } = useHelps();
 
   return {
-    isSubState: false,
     runAllEnters,
     helps,
     defineFunctions: {

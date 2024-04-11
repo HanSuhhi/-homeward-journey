@@ -31,6 +31,7 @@ export function useKeys(checkInputValue: UseAutocomplete["checkInputValue"]) {
     setTimeout(async () => {
       setInputMatter(inputValue.value);
       const helpCommand = stateManager.currentState.value?.helps.find(({ name }) => name === i18nLangModel.common_commands.help.name);
+      console.log("🚀 ~ setTimeout ~ stateManager.currentState.value:", stateManager.currentState.value);
       await helpCommand?.effect();
       inputValue.value = inputValue.value.slice(0, -1);
     }, 0);
