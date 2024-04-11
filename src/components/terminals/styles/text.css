@@ -7,3 +7,10 @@
   color: var(--white-deep-2);
   text-decoration: underline;
 }
+
+.text-help-title {
+  display: inline-block;
+  width: 120px;
+  margin-left: var(--large);
+  text-decoration: underline;
+}

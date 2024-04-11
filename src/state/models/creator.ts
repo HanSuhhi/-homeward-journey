@@ -29,6 +29,7 @@ function craeteDefaultState() {
   const { helps, setHelp } = useHelps();
 
   return {
+    isSubState: false,
     runAllEnters,
     helps,
     defineFunctions: {

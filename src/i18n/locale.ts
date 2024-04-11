@@ -12,10 +12,11 @@ function createI18nConfig() {
   }
 
   const i18n = createI18n({
-    globalInjection: true,
     locale,
     legacy: false,
     messages,
+    fallbackLocale: locale,
+
   });
 
   return i18n;

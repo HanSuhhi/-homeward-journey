@@ -2,6 +2,7 @@ export const cn_common_commands = {
   help: {
     name: "帮助",
     description: "列出当前状态支持的所有指令",
+    welcome: "以下是可执行命令：",
   },
   setting: {
     name: "设置",
@@ -13,6 +14,7 @@ export const en_common_commands = {
   help: {
     name: "Help",
     description: "List all commands supported in the current state.",
+    welcome: "exec commands:",
   },
   setting: {
     name: "Setting",

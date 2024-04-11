@@ -15,13 +15,12 @@ export function initInput() {
   };
 
   watch(inputVisible, (IsVisable) => {
-    if (IsVisable) {
-      const lastMessage = globalMatters[globalMatters.length - 1];
-      const index = Reflect.get(lastMessage, "id");
-      const currentElement = document.getElementById(`text-${index}`);
-      currentElement?.classList.add("message-matter-end");
-      inputValue.value = "";
-      nextTick(() => inputRef.value?.focus());
-    }
+    if (!IsVisable) return;
+    const lastMessage = globalMatters[globalMatters.length - 1];
+    const index = Reflect.get(lastMessage, "id");
+    const currentElement = document.getElementById(`text-${index}`);
+    currentElement?.classList.add("message-matter-end");
+    inputValue.value = "";
+    nextTick(() => inputRef.value?.focus());
   });
 }

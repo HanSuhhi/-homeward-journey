@@ -1,0 +1,41 @@
+<script setup lang='ts'>
+import TerminalTheme from "./TerminalTheme.vue";
+import { useAutocomplete } from "./composables/autocomplete";
+import { useKeys } from "./composables/key";
+import { inputRef, inputValue, inputVisible } from "@/input.store";
+
+const { checkInputValue } = useAutocomplete();
+const { enterDown, questionMarkDown } = useKeys(checkInputValue);
+</script>
+
+<template>
+  <code v-show="inputVisible" :s="inputVisible" class="terminal-input">
+    <TerminalTheme />
+    <input ref="inputRef" v-model="inputValue" class="terminal-input_input input-reset" @keydown.enter="enterDown" @keydown.?="questionMarkDown">
+  </code>
+</template>
+
+<style scoped>
+.input-reset {
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  padding-block: 0;
+  padding-inline: 0;
+}
+
+.terminal-input {
+  display: flex;
+  align-items: center;
+  color: var(--main-color);
+}
+
+.terminal-input_input {
+  width: 100%;
+  color: var(--main-color);
+  font-size: var(--font-body);
+  font-family: monospace;
+  flex: 1;
+}
+</style>

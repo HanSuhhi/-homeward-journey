@@ -1,4 +1,5 @@
 export const cn_init = {
+  "stateName": "初始化",
   "title": "王侍",
   "1": "百谷国宫廷历来有个规矩：当王长子年满十七岁之时，须在王的授意下组建一支属于其的侍卫队。",
   "2": "届时全国布告，凡家中有适龄子女者，皆可参与选拔。",
@@ -9,6 +10,7 @@ export const cn_init = {
 };
 
 export const en_init: typeof cn_init = {
+  "stateName": "init",
   "title": "todo",
   "1": "todo",
   "2": "todo",

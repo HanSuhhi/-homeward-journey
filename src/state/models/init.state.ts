@@ -1,6 +1,6 @@
 import sleep from "sleep-promise";
 import { stateManager } from "../state";
-import { GameState } from "../state.enum";
+import { GAME_STATE } from "../state.enum";
 import { defineState } from "./creator";
 import { setConsoleMessageText } from "@/components/characters/console/message";
 import { setTitleMatter } from "@/core/matters";
@@ -49,7 +49,7 @@ export default defineState(({ onEntered }) => {
     for (const word of beginWords) setConsoleMessageText(word);
     setMessage(eHkwnY2Xi);
 
-    stateManager.switchState(GameState.Intoxication);
+    stateManager.switchState(GAME_STATE.Intoxication);
     inputVisible.value = true;
 
     setMessage({ type: "hr" });

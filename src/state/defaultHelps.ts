@@ -1,4 +1,6 @@
-import { setConsoleMessageText } from "@/components/characters/console/message";
+import { stateManager } from "./state";
+import { GAME_STATE } from "./state.enum";
+import { setConsoleHelpMessageText, setConsoleMessageText } from "@/components/characters/console/message";
 import { setConsoleMatter } from "@/core/matters";
 import { i18nLangModel } from "@/i18n/model";
 
@@ -9,7 +11,12 @@ export const commonHelps: Help[] = [
     hide: true,
     effect() {
       setConsoleMatter();
-      // setConsoleMessageText("帮助");
+      const helps = stateManager.currentState.value?.helps ?? [];
+      setConsoleMessageText(i18nLangModel.common_commands.help.welcome);
+      for (const help of helps) {
+        if (help.hide) continue;
+        setConsoleHelpMessageText(help);
+      }
     },
   },
   {
@@ -18,6 +25,7 @@ export const commonHelps: Help[] = [
     hide: true,
     effect() {
       setConsoleMatter();
+      stateManager.switchState(GAME_STATE.Setting);
       setConsoleMessageText(i18nLangModel.states.setting.success);
     },
   },

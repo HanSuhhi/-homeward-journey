@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import TerminalText from "./TerminalText.vue";
+import TerminalText from "./TerminalMessage.vue";
 import { globalMatters } from "@/core/matter";
-import TerminalInput from "@/components/TerminalInput.vue";
+import TerminalInput from "@/components/terminals/TerminalInput.vue";
 
 function getKey(message: Message) {
   return Reflect.get(message, "id");

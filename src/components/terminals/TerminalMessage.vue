@@ -1,7 +1,7 @@
 <script setup lang='ts'>
-import TerminalTheme from "../TerminalTheme.vue";
 import { provideTexts } from "./composables/message";
 import { useModels } from "./composables/models";
+import TerminalTheme from "./TerminalTheme.vue";
 
 const props = defineProps<{ message: Message }>();
 const { models } = useModels();
@@ -11,7 +11,7 @@ provideTexts(props.message);
 
 <template>
   <code class="terminal-text" :class="props.message.classes">
-    <TerminalTheme v-if="props.message.displayTheme" />
+    <TerminalTheme v-if="props.message.displayTheme" :need-raw="props.message.displayTheme" />
     <component :is="models[props.message.type]" />
   </code>
 </template>
