@@ -1,5 +1,4 @@
 import { defineState } from "./creator";
 
-export default defineState(() => {
-
+export default defineState(({ setHelp }) => {
 });

@@ -1,11 +1,9 @@
 <script setup lang='ts'>
 import TerminalTheme from "./TerminalTheme.vue";
-import { useAutocomplete } from "./composables/autocomplete";
-import { useKeys } from "./composables/key";
+import { useKeydown } from "./composables/keydown";
 import { inputRef, inputValue, inputVisible } from "@/input.store";
 
-const { checkInputValue } = useAutocomplete();
-const { enterDown, questionMarkDown } = useKeys(checkInputValue);
+const { enterDown, questionMarkDown } = useKeydown();
 </script>
 
 <template>
@@ -38,4 +36,4 @@ const { enterDown, questionMarkDown } = useKeys(checkInputValue);
   font-family: monospace;
   flex: 1;
 }
-</style>
+</style>./composables/keydown

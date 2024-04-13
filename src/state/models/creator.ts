@@ -1,4 +1,4 @@
-import { commonHelps } from "../defaultHelps";
+import { useCommand } from "./composables/command";
 
 function useOnEnter() {
   const enters: Array<() => any> = [];
@@ -14,28 +14,16 @@ function useOnEnter() {
   return { onEntered, runAllEnters };
 }
 
-function useHelps() {
-  const helps: Help[] = [
-    ...commonHelps,
-  ];
-
-  const setHelp = (help: Help) => {
-    helps.push(help);
-  };
-
-  return { setHelp, helps };
-}
-
 function craeteDefaultState() {
   const { onEntered, runAllEnters } = useOnEnter();
-  const { helps, setHelp } = useHelps();
+  const { commands, setCommand } = useCommand();
 
   return {
     runAllEnters,
-    helps,
+    commands,
     defineFunctions: {
       onEntered,
-      setHelp,
+      setCommand,
     },
   };
 }

@@ -14,7 +14,7 @@ export function setConsoleMessageText(model: string) {
   });
 }
 
-export function setConsoleHelpMessageText({ name, description }: Help) {
+export function setConsoleCommandMessageText({ name, description }: Command) {
   setMessage({
     classes: "message-console",
     type: "text",

@@ -1,4 +1,5 @@
-import { cn_common_commands } from "../packages/commonCommands";
+import { cn_help_commands } from "../packages/commands/help.command";
+import { cn_setting_commands } from "../packages/commands/setting.command";
 import { cn_init } from "../packages/init.state";
 import { cn_intoxication } from "../packages/intoxication";
 import { cn_setting } from "../packages/setting.state";
@@ -17,7 +18,10 @@ type StateModel = {
 
 const model = {
   states: <StateModel>states,
-  common_commands: cn_common_commands,
+  commands: {
+    help: cn_help_commands,
+    setting: cn_setting_commands,
+  },
   warning: cn_warning,
 };
 

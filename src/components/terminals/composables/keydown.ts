@@ -1,11 +1,18 @@
-import type { UseAutocomplete } from "./autocomplete";
+import { useMagicKeys, whenever } from "@vueuse/core";
+import { completeCommand, validateInputValue } from "./validate";
 import { inNoCommandInput } from "@/composables/input";
 import { setInputMatter } from "@/core/matters";
 import { i18nLangModel } from "@/i18n/model";
 import { inputValue, inputVisible } from "@/input.store";
 import { stateManager } from "@/state/state";
 
-export function useKeys(checkInputValue: UseAutocomplete["checkInputValue"]) {
+function watchTabDown() {
+  const { tab } = useMagicKeys();
+
+  whenever(tab, completeCommand);
+}
+
+export function useKeydown() {
   function useKeyDown(fn: () => any) {
     inputVisible.value = false;
     return Promise.resolve(setInputMatter(inputValue.value))
@@ -17,12 +24,7 @@ export function useKeys(checkInputValue: UseAutocomplete["checkInputValue"]) {
   function enterDown() {
     useKeyDown(async () => {
       if (inputValue.value === "") return;
-      const target = checkInputValue();
-
-      if (!Array.isArray(target)) return await stateManager.currentState.value?.helps[target].effect();
-      if (target.length === 1) return await stateManager.currentState.value?.helps[target[0]].effect();
-
-      throw new Error("err");
+      validateInputValue();
     });
   }
 
@@ -30,15 +32,17 @@ export function useKeys(checkInputValue: UseAutocomplete["checkInputValue"]) {
   async function questionMarkDown() {
     setTimeout(async () => {
       setInputMatter(inputValue.value);
-      const helpCommand = stateManager.currentState.value?.helps.find(({ name }) => name === i18nLangModel.common_commands.help.name);
-      console.log("🚀 ~ setTimeout ~ stateManager.currentState.value:", stateManager.currentState.value);
-      await helpCommand?.effect();
+      const targetCommand = stateManager.currentState.value?.commands.find(({ name }) => name === i18nLangModel.commands.help.name);
+      targetCommand?.effect && await targetCommand.effect();
       inputValue.value = inputValue.value.slice(0, -1);
     }, 0);
   }
 
+  watchTabDown();
+
   return {
     enterDown,
     questionMarkDown,
+
   };
 }
