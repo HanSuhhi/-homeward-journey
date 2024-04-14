@@ -1,3 +1,4 @@
+import { defineCommand } from "./creator";
 import { setConsoleCommandMessageText, setConsoleMessageText } from "@/components/characters/console/message";
 import { setConsoleMatter } from "@/core/matters";
 import { i18nLangModel } from "@/i18n/model";
@@ -5,19 +6,26 @@ import { stateManager } from "@/state/state";
 
 const model = i18nLangModel.commands.help;
 
-export const helpCommand: Command = {
-  name: model.name,
-  description: model.description,
-  hide: true,
-  effect() {
-    setConsoleMatter();
-    const commands = stateManager.currentState.value?.commands ?? [];
-    setConsoleMessageText(model.welcome);
-    for (const command of commands) {
-      if (command.hide) continue;
-      setConsoleCommandMessageText(command);
-    }
-  },
+export function createSingleHelpCommand(parentCommands?: Command[]): Command {
+  return {
+    name: model.name,
+    description: model.description,
+    hide: true,
+    effect() {
+      setConsoleMatter();
+
+      const commands = (parentCommands || stateManager.currentState.value?.commands || []).filter(({ hide }) => !hide);
+      if (!commands.length) return setConsoleMessageText(model.no_helps);
+
+      setConsoleMessageText(model.welcome);
+
+      for (const command of commands) setConsoleCommandMessageText(command);
+    },
+  };
+}
+
+export const helpCommand: Command = defineCommand({
+  ...createSingleHelpCommand(),
   children: [
     // all
     {
@@ -25,10 +33,12 @@ export const helpCommand: Command = {
       description: model.all.description,
       effect() {
         setConsoleMatter();
-        const commands = stateManager.currentState.value?.commands ?? [];
+
+        const commands = helpCommand.children ?? [];
+        if (!commands.length) return setConsoleMessageText(model.no_helps);
+
         setConsoleMessageText(model.welcome);
-        for (const command of commands)
-          setConsoleCommandMessageText(command);
+        for (const command of commands) setConsoleCommandMessageText(command);
       },
     },
     // hide
@@ -37,7 +47,10 @@ export const helpCommand: Command = {
       description: model.hide.description,
       effect() {
         setConsoleMatter();
-        const commands = stateManager.currentState.value?.commands ?? [];
+
+        const commands = helpCommand.children?.filter(({ hide }) => hide) ?? [];
+        if (!commands.length) return setConsoleMessageText(model.no_helps);
+
         setConsoleMessageText(model.welcome);
         for (const command of commands) {
           if (!command.hide) continue;
@@ -46,4 +59,4 @@ export const helpCommand: Command = {
       },
     },
   ],
-};
+});

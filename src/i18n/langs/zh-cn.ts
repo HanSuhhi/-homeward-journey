@@ -17,6 +17,7 @@ type StateModel = {
 };
 
 const model = {
+  questionKey: "？",
   states: <StateModel>states,
   commands: {
     help: cn_help_commands,

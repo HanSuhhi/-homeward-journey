@@ -7,6 +7,7 @@ import { en_warning } from "../packages/warning";
 import type { I18N } from "./zh-cn";
 
 export default <I18N>{
+  questionKey: "?",
   states: {
     init: en_init,
     setting: en_setting,

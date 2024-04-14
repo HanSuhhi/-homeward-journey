@@ -1,15 +1,15 @@
 <script setup lang='ts'>
 import TerminalTheme from "./TerminalTheme.vue";
 import { useKeydown } from "./composables/keydown";
-import { inputRef, inputValue, inputVisible } from "@/input.store";
+import { inputDisabled, inputRef, inputValue, inputVisible } from "@/input.store";
 
-const { enterDown, questionMarkDown } = useKeydown();
+const { enterDown } = useKeydown();
 </script>
 
 <template>
   <code v-show="inputVisible" :s="inputVisible" class="terminal-input">
     <TerminalTheme />
-    <input ref="inputRef" v-model="inputValue" class="terminal-input_input input-reset" @keydown.enter="enterDown" @keydown.?="questionMarkDown">
+    <input ref="inputRef" v-model="inputValue" :disabled="inputDisabled" class="terminal-input_input input-reset" @keydown.enter="enterDown">
   </code>
 </template>
 
