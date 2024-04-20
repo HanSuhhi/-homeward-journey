@@ -1,4 +1,5 @@
 <script setup lang='ts'>
+import { unref } from "vue";
 import { provideTexts } from "./composables/message";
 import { useModels } from "./composables/models";
 import TerminalTheme from "./TerminalTheme.vue";
@@ -10,17 +11,26 @@ provideTexts(props.message);
 </script>
 
 <template>
-  <code class="terminal-text" :class="props.message.classes">
-    <TerminalTheme v-if="props.message.displayTheme" :need-raw="props.message.displayTheme" />
-    <component :is="models[props.message.type]" />
-  </code>
+  <p class="terminal-message p-reset" :class="message.classes" :type="unref(message.type)">
+    <TerminalTheme v-if="message.displayTheme" :need-raw="message.displayTheme" />
+    <Suspense>
+      <component :is="models[unref(message.type)]" />
+    </Suspense>
+  </p>
 </template>
 
 <style scoped>
 @layer component {
-  .terminal-text {
+  .terminal-message {
+    position: relative;
     color: var(--main-color);
     display: block;
+    font-size: 18px;
+  }
+
+  .p-reset {
+    margin-block-start: 0;
+    margin-block-end: 0;
   }
 }
 </style>

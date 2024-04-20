@@ -1,9 +1,10 @@
 import { helpCommand } from "@/commands/help.command";
+import { settingCommand } from "@/commands/setting.command";
 
 export function useCommand() {
   const commands: Command[] = [
     helpCommand,
-    // settingCommand,
+    settingCommand,
   ];
 
   const setCommand = (cmd: Command) => {

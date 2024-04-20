@@ -17,10 +17,10 @@ function setConsoleMatter() {
 function setConsoleErrorMatter() {
   return setMatter("matter-console matter-bg matter-error");
 }
-function setInputMatter(model: string) {
+async function setInputMatter(model: string) {
   setMatter("matter-input");
 
-  setMessage({
+  await setMessage({
     type: "text",
     displayTheme: true,
     texts: { model },

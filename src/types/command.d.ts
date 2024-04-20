@@ -2,6 +2,6 @@ interface Command {
   name: string;
   description: string;
   children?: Command[];
-  effect?: () => any;
+  effect?: (command?: string) => any;
   hide?: boolean;
 }

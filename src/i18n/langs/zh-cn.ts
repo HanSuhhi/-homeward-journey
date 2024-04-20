@@ -1,4 +1,5 @@
 import { cn_help_commands } from "../packages/commands/help.command";
+import { cn_language_commands } from "../packages/commands/language.command";
 import { cn_setting_commands } from "../packages/commands/setting.command";
 import { cn_init } from "../packages/init.state";
 import { cn_intoxication } from "../packages/intoxication";
@@ -22,6 +23,7 @@ const model = {
   commands: {
     help: cn_help_commands,
     setting: cn_setting_commands,
+    language: cn_language_commands,
   },
   warning: cn_warning,
 };

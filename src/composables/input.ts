@@ -5,7 +5,7 @@ import { inputValue } from "@/input.store";
 
 export async function inNoCommandInput() {
   setConsoleErrorMatter();
-  setMessage({
+  await setMessage({
     type: "text",
     texts: [
       {

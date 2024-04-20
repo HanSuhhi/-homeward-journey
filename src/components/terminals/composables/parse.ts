@@ -1,5 +1,6 @@
 import { i18n } from "@/i18n/locale";
 import { i18nLangModel } from "@/i18n/model";
+import { Blank, anyInput } from "@/i18n/vars";
 import { stateManager } from "@/state/state";
 
 function compareStringSimilarity(inputCommand: string, commands: Command[]) {
@@ -10,10 +11,12 @@ function compareStringSimilarity(inputCommand: string, commands: Command[]) {
   for (const _index in commands) {
     const index = Number(_index);
     const { name } = commands[index];
+    // if (name === anyInput)
+
     const presetCommand = i18n.global.t(name).trim().toLowerCase();
 
     if (presetCommand.includes(userCommand)) partials.push(index);
-    if (userCommand === presetCommand) return index;
+    if (userCommand === presetCommand || presetCommand === anyInput) return index;
   }
 
   if (partials.length === 0) return partials;
@@ -33,12 +36,12 @@ export async function parseInputValue(
   value: string,
   filterHide = false,
 ): Promise<ParseInputResult.NoSuchCommand | [result: ParseInputResult, command: Command] | [result: ParseInputResult.TooMuchResult, commands: Command[]]> {
-  let commands = stateManager.currentState.value!.commands;
+  let commands = stateManager.currentState.value?.commands || [];
   if (filterHide) commands = commands.filter(command => !command.hide);
 
   const inputCommandSplits = value.trim().split(/\s+/);
 
-  const haveSpace = value.endsWith(" ");
+  const haveSpace = value.endsWith(Blank);
   if (haveSpace) inputCommandSplits.push("");
 
   while (inputCommandSplits.length) {
@@ -73,3 +76,7 @@ export async function parseInputValue(
 
   throw new Error(i18nLangModel.warning.no_such_command);
 }
+
+setTimeout(() => {
+  parseInputValue("设置 ");
+}, 1000);

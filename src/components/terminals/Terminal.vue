@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TerminalText from "./TerminalMessage.vue";
+import TerminalMessage from "./TerminalMessage.vue";
 import { globalMatters } from "@/core/matter";
 import TerminalInput from "@/components/terminals/TerminalInput.vue";
 
@@ -12,7 +12,7 @@ function getKey(message: Message) {
   <div class="terminal">
     <article class="terminal-main">
       <section v-for="{ messages, classes }, key of globalMatters" :key class="matter" :class="classes">
-        <TerminalText v-for="message of messages" :id="`text-${getKey(message)}`" :key="getKey(message)" :message />
+        <TerminalMessage v-for="message of messages" :id="`text-${getKey(message)}`" :key="getKey(message)" :message />
       </section>
     </article>
     <TerminalInput />
@@ -25,11 +25,10 @@ function getKey(message: Message) {
     max-height: 100vh;
     overflow-y: none;
     padding: var(--small);
+  }
 
-    .terminal-main {
-      width: 100%;
-
-    }
+  .terminal-main {
+    width: 100%;
   }
 }
 </style>

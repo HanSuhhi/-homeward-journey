@@ -1,3 +1,4 @@
+import type { GAME_STATE } from "../state.enum";
 import { useCommand } from "./composables/command";
 
 function useOnEnter() {
@@ -40,4 +41,6 @@ export function defineState(fn: (state: StateDefine) => any) {
   };
 }
 
-export type StateCreator = ReturnType<typeof defineState>;
+export type StateCreator = ReturnType<typeof defineState> & {
+  name: GAME_STATE;
+};

@@ -5,3 +5,16 @@
 .message-matter-end {
   margin-bottom: var(--mini);
 }
+
+.message-type_picker {
+  display: flex;
+  align-items: baseline;
+
+  &:has(input:checked) {
+    text-decoration: underline;
+  }
+}
+
+.message-type_picker_checked {
+  text-decoration: underline;
+}

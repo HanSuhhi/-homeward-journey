@@ -1,4 +1,5 @@
 import { en_help_commands } from "../packages/commands/help.command";
+import { en_language_commands } from "../packages/commands/language.command";
 import { en_setting_commands } from "../packages/commands/setting.command";
 import { en_init } from "../packages/init.state";
 import { en_intoxication } from "../packages/intoxication";
@@ -16,6 +17,7 @@ export default <I18N>{
   commands: {
     help: en_help_commands,
     setting: en_setting_commands,
+    language: en_language_commands,
   },
   warning: en_warning,
 };

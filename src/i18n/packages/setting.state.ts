@@ -4,6 +4,6 @@ export const cn_setting = {
 };
 
 export const en_setting = {
-  stateName: "Settings",
+  stateName: "Setting",
   success: "You are now in settings mode.",
 };

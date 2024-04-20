@@ -2,7 +2,7 @@ import sleep from "sleep-promise";
 import { stateManager } from "../state";
 import { GAME_STATE } from "../state.enum";
 import { defineState } from "./creator";
-import { setConsoleMessageText } from "@/components/characters/console/message";
+import { setConsoleDefaultMessageText } from "@/components/terminals/contents/messages/message";
 import { setTitleMatter } from "@/core/matters";
 import { setMessage } from "@/core/message";
 import { i18nLangModel } from "@/i18n/model";
@@ -11,7 +11,7 @@ import { inputVisible } from "@/input.store";
 export default defineState(({ onEntered }) => {
   onEntered(async () => {
     setTitleMatter();
-    const title: Message = {
+    const title: MessageCreator = {
       type: "text",
       classes: "message-game-title",
       texts: {
@@ -19,7 +19,7 @@ export default defineState(({ onEntered }) => {
         classes: ["window"],
       },
     };
-    setMessage(title);
+    await setMessage(title);
 
     await sleep(import.meta.env.GAP);
 
@@ -29,7 +29,7 @@ export default defineState(({ onEntered }) => {
       i18nLangModel.states.init[3],
     ];
 
-    const eHkwnY2Xi: Message = {
+    const eHkwnY2Xi: MessageCreator = {
       type: "text",
       texts: [
         {
@@ -46,12 +46,12 @@ export default defineState(({ onEntered }) => {
         },
       ],
     };
-    for (const word of beginWords) setConsoleMessageText(word);
-    setMessage(eHkwnY2Xi);
+    for (const word of beginWords) setConsoleDefaultMessageText(word);
+    await setMessage(eHkwnY2Xi);
 
     stateManager.switchState(GAME_STATE.Intoxication);
     inputVisible.value = true;
 
-    setMessage({ type: "hr" });
+    await setMessage({ type: "hr" });
   });
 });

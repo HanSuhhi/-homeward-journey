@@ -1,26 +1,27 @@
 import { ParseInputResult, parseInputValue } from "./parse";
-import { questionMark } from "@/i18n/vars";
+import { Blank, questionMark } from "@/i18n/vars";
 import { i18n } from "@/i18n/locale";
 import { i18nLangModel } from "@/i18n/model";
-import { inputRef, inputValue } from "@/input.store";
+import { focusInput, inputRef, inputValue } from "@/input.store";
 import { setConsoleMatter } from "@/core/matters";
-import { setConsoleMessageText } from "@/components/characters/console/message";
+import { setConsoleDefaultMessageText } from "@/components/terminals/contents/messages/message";
 import { inNoCommandInput } from "@/composables/input";
 
 export async function runCommand(command: string) {
   const result = await parseInputValue(command.trim());
 
   if (Array.isArray(result)) {
-    const [commandResult, command] = result;
+    const [commandResult, commandStruct] = result;
 
     switch (commandResult) {
       case ParseInputResult.NoEffect:
       case ParseInputResult.TooMuchArgs:
-        setConsoleMatter();
-        setConsoleMessageText(i18nLangModel.warning.no_such_command);
+        await inNoCommandInput();
+        // setConsoleMatter();
+        // setConsoleDefaultMessageText(i18nLangModel.warning.no_such_command);
         break;
       case ParseInputResult.Run:
-        await command.effect?.();
+        await commandStruct.effect?.(command);
         break;
       case ParseInputResult.TooMuchResult:
         console.warn("指令过多：无法确定具体指令");
@@ -67,23 +68,26 @@ export async function modifyLastInputCommandSplit(callback: (lastInputCommandSpl
 }
 
 export function completeCommand() {
-  if (!inputValue.value) return;
-  modifyLastInputCommandSplit(({ command }) => {
-    if (!command) return console.warn("无该命令");
+  // if (!inputValue.value) return;
+  Promise.resolve()
+    .then(() => modifyLastInputCommandSplit(({ command }) => {
+      // no command
+      if (!command) return;
 
-    if (Array.isArray(command)) {
-      setTimeout(() => inputRef.value!.focus(), 0);
-      return console.warn("支持的命令很多");
-    }
+      let currentCommand: Command;
 
-    const needReplace = inputValue.value.includes(" ");
-    if (needReplace) {
-      const lastSpaceIndex = inputValue.value.lastIndexOf(" ");
-      inputValue.value = `${inputValue.value.substring(0, lastSpaceIndex + 1)}${i18n.global.t(command.name)} `;
-    }
-    else {
-      inputValue.value = `${i18n.global.t(command.name)} `;
-    }
-  });
-  setTimeout(() => inputRef.value!.focus(), 0);
+      // to many command
+      if (Array.isArray(command)) currentCommand = command.find(({ hide }) => !hide) || command[0];
+      else currentCommand = command;
+
+      const needReplace = inputValue.value.includes(Blank);
+      if (needReplace) {
+        const lastSpaceIndex = inputValue.value.lastIndexOf(Blank);
+        inputValue.value = `${inputValue.value.substring(0, lastSpaceIndex + 1)}${i18n.global.t(currentCommand.name)} `;
+      }
+      else {
+        inputValue.value = `${i18n.global.t(currentCommand.name)} `;
+      }
+    }))
+    .then(focusInput);
 }

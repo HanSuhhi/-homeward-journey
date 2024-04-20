@@ -13,16 +13,14 @@ for (const key in states) {
 
 function useState() {
   const state = ref<GAME_STATE>();
-  const mainState = ref<GAME_STATE>();
   const currentState = ref<State>();
+  const currentStateName = computed(() => state.value ? i18nLangModel.states[state.value].stateName : "");
 
   async function switchState(newState: GAME_STATE) {
     currentState.value = states[newState]();
     state.value = newState;
     await currentState.value.runAllEnters();
   }
-
-  const currentStateName = computed(() => state.value ? i18nLangModel.states[state.value].stateName : "");
 
   return {
     state,
