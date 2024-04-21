@@ -1,6 +1,7 @@
 import { useMagicKeys, whenever } from "@vueuse/core";
 import { computed } from "vue";
-import { completeCommand, modifyLastInputCommandSplit, runCommand } from "./command";
+import { completeCommand, modifyLastInputCommandSplit, runCommand } from "../components/terminals/composables/command";
+import type { useInputHistory } from "./inputHistory";
 import { createSingleHelpCommand } from "@/commands/help.command";
 import { inNoCommandInput } from "@/composables/input";
 import { inInputState } from "@/core/inputState";
@@ -9,15 +10,14 @@ import { i18n } from "@/i18n/locale";
 import { i18nLangModel } from "@/i18n/model";
 import { Blank, questionMark } from "@/i18n/vars";
 import { inputValue, inputValueSplits, inputVisible } from "@/input.store";
-import { useInputController } from "@/core/inputController";
 
-function watchTabDown() {
+export function watchTabDown() {
   const { tab } = useMagicKeys();
 
   whenever(tab, completeCommand);
 }
 
-function watchQuestionMarkDown() {
+export function watchQuestionMarkDown() {
   const enterQuestionMark = computed(() => inputValue.value.endsWith(questionMark));
   async function questionMarkDown() {
     setInputMatter(inputValue.value);
@@ -42,36 +42,4 @@ function watchQuestionMarkDown() {
   }
 
   whenever(enterQuestionMark, questionMarkDown);
-}
-
-export function useKeydown() {
-  const { setInputHistory } = useInputController();
-
-  function useKeyDown(fn: () => any) {
-    inputVisible.value = false;
-    return Promise.resolve(setInputMatter(inputValue.value))
-      .then(fn)
-      .then(setInputHistory)
-      .catch(async (err) => {
-        console.warn(err);
-        await inNoCommandInput();
-      })
-      .finally(() => {
-        if (inInputState.value) inputVisible.value = true;
-      });
-  }
-
-  function enterDown() {
-    useKeyDown(async () => {
-      if (inputValue.value === "") return;
-      await runCommand(inputValue.value);
-    });
-  }
-
-  watchTabDown();
-  watchQuestionMarkDown();
-
-  return {
-    enterDown,
-  };
 }

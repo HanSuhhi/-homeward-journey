@@ -3,7 +3,7 @@ import { textRoles } from "../texts/roles";
 import { messageRoles } from "./roles";
 import { messageTypes } from "./types";
 import { createMessageByMessageCreator, setMessage } from "@/core/message";
-import { i18n } from "@/i18n/locale";
+import { i18nLangModel } from "@/i18n/model";
 
 export async function setConsoleDefaultMessageText(model: TextModel) {
   await setMessage({
@@ -25,7 +25,7 @@ export async function setConsoleCommandMessageText({ name, description }: Comman
     texts: [
       {
         classes: "text-role_console text-help-title",
-        model: `${i18n.global.t(name)}`,
+        model: name,
       },
       {
         classes: textRoles.console,
@@ -42,7 +42,7 @@ export async function createCockpitPickerCommandMessage({ name, description }: C
     texts: [
       {
         classes: [textRoles.cockpit, "text-help-title"],
-        model: `${i18n.global.t(name)}`,
+        model: name,
       },
       {
         classes: [textRoles.cockpit],
@@ -67,4 +67,21 @@ export async function setConsolePickerMessageTexts(model: TextModel) {
   };
 
   await setMessage(message);
+}
+
+export function createCockpitRunCommandMessage() {
+  return createMessageByMessageCreator({
+    classes: [messageRoles.cockpit, messageTypes.picker],
+    type: ref("picker"),
+    texts: [
+      {
+        classes: [textRoles.cockpit, "text-help-title"],
+        model: i18nLangModel.commands.run.name,
+      },
+      {
+        classes: [textRoles.cockpit],
+        model: i18nLangModel.commands.run.description,
+      },
+    ],
+  });
 }

@@ -1,8 +1,9 @@
 <script setup lang='ts'>
+import { storeToRefs } from "pinia";
 import TerminalMessage from "./terminals/TerminalMessage.vue";
-import { useInputCheck } from "@/composables/cockpit";
+import { useCockpitStore } from "@/core/cockpit";
 
-const { commands } = useInputCheck();
+const { commands } = storeToRefs(useCockpitStore());
 
 function getKey(message: Message) {
   return Reflect.get(message, "id");

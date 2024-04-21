@@ -1,17 +1,20 @@
 <script setup lang='ts'>
 import TerminalTheme from "./TerminalTheme.vue";
-import { useKeydown } from "./composables/keydown";
 import Cockpit from "@/components/Cockpit.vue";
+import { useInputController } from "@/core/inputController";
+import { watchQuestionMarkDown, watchTabDown } from "@/core/inputKeydown";
 import { inputDisabled, inputRef, inputValue, inputVisible } from "@/input.store";
 
-const { enterDown } = useKeydown();
+watchTabDown();
+watchQuestionMarkDown();
+
+useInputController();
 </script>
 
 <template>
-  <div v-show="inputVisible" :s="inputVisible" class="terminal-input">
+  <div v-show="inputVisible" class="terminal-input">
     <TerminalTheme />
-    <input ref="inputRef" v-model="inputValue" :disabled="inputDisabled" class="terminal-input_input input-reset"
-      @keydown.enter="enterDown">
+    <input ref="inputRef" v-model="inputValue" :disabled="inputDisabled" class="terminal-input_input input-reset">
   </div>
   <Cockpit class="terminal-cockpit" />
 </template>
