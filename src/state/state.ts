@@ -17,9 +17,14 @@ function useState() {
   const currentStateName = computed(() => state.value ? i18nLangModel.states[state.value].stateName : "");
 
   async function switchState(newState: GAME_STATE) {
-    currentState.value = states[newState]();
-    state.value = newState;
-    await currentState.value.runAllEnters();
+    try {
+      currentState.value = states[newState]();
+      state.value = newState;
+      await currentState.value.runAllEnters();
+    }
+    catch (error) {
+      console.warn(error);
+    }
   }
 
   return {

@@ -17,6 +17,7 @@ interface Message {
   type: MessageType | import("vue").Ref<MessageType>;
   displayTheme?: boolean;
   texts?: Array<MessageText> | MessageText;
+  main?: boolean;
 }
 
 type MessageCreator = Omit<Message, "classes"> & {

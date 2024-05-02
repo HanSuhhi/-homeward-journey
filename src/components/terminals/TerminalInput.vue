@@ -1,13 +1,10 @@
 <script setup lang='ts'>
 import TerminalTheme from "./TerminalTheme.vue";
 import Cockpit from "@/components/Cockpit.vue";
-import { useInputController } from "@/core/inputController";
-import { watchQuestionMarkDown, watchTabDown } from "@/core/inputKeydown";
+import { useInputController, watchQuestionMarkDown } from "@/core/inputController";
 import { inputDisabled, inputRef, inputValue, inputVisible } from "@/input.store";
 
-watchTabDown();
 watchQuestionMarkDown();
-
 useInputController();
 </script>
 
@@ -16,7 +13,7 @@ useInputController();
     <TerminalTheme />
     <input ref="inputRef" v-model="inputValue" :disabled="inputDisabled" class="terminal-input_input input-reset">
   </div>
-  <Cockpit class="terminal-cockpit" />
+  <Cockpit v-show="inputVisible" class="terminal-cockpit" />
 </template>
 
 <style scoped>

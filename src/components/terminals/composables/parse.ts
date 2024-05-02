@@ -76,7 +76,3 @@ export async function parseInputValue(
 
   throw new Error(i18nLangModel.warning.no_such_command);
 }
-
-setTimeout(() => {
-  parseInputValue("设置 ");
-}, 1000);

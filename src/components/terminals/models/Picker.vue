@@ -8,6 +8,8 @@ import { usePickerStore } from "@/core/picker";
 import { usePickerDeg } from "@/composables/pickerDeg";
 import TerminalText from "@/components/terminals/models/Text.vue";
 
+defineProps<{ main?: boolean }>();
+
 const { activePickerIndex } = storeToRefs(usePickerStore());
 const radioRef = ref<HTMLInputElement & VNodeRef>();
 
@@ -21,7 +23,7 @@ const id = computed(() => `picker${pickerIndex.value}`);
 
 <template>
   <input :id ref="radioRef" v-model="activePickerIndex" name="terminal-picker" type="radio" :value="pickerIndex">
-  <label :for="id">
+  <label :for="id" :class="{ main }">
     <Suspense>
       <TerminalText />
     </Suspense>
@@ -83,6 +85,11 @@ const id = computed(() => `picker${pickerIndex.value}`);
 
   label {
     width: 100%;
+
+    &.main {
+      color: var(--yellow-bright-1);
+    }
   }
+
 }
 </style>

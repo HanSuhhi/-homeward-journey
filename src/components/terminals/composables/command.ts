@@ -1,11 +1,9 @@
 import { ParseInputResult, parseInputValue } from "./parse";
-import { Blank, questionMark } from "@/i18n/vars";
+import { inNoCommandInput } from "@/composables/input";
 import { i18n } from "@/i18n/locale";
 import { i18nLangModel } from "@/i18n/model";
-import { focusInput, inputRef, inputValue } from "@/input.store";
-import { setConsoleMatter } from "@/core/matters";
-import { setConsoleDefaultMessageText } from "@/components/terminals/contents/messages/message";
-import { inNoCommandInput } from "@/composables/input";
+import { Blank, questionMark } from "@/i18n/vars";
+import { focusInput, inputValue } from "@/input.store";
 
 export async function runCommand(command: string) {
   const result = await parseInputValue(command.trim());

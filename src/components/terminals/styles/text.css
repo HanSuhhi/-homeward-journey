@@ -15,3 +15,6 @@
   text-decoration: underline;
 }
 
+.text-role_place {
+  color: var(--yellow);
+}

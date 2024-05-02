@@ -1,4 +1,4 @@
-import { setConsoleDefaultMessageText } from "@/components/terminals/contents/messages/message";
+import { setConsoleDefaultMessage } from "@/components/terminals/contents/messages/message";
 import { setConsoleMatter } from "@/core/matters";
 import { i18nLangModel } from "@/i18n/model";
 import { stateManager } from "@/state/state";
@@ -23,6 +23,6 @@ export const settingCommand: Command = {
 
     setConsoleMatter();
     stateManager.switchState(GAME_STATE.Setting);
-    setConsoleDefaultMessageText(i18nLangModel.states.setting.success);
+    setConsoleDefaultMessage(i18nLangModel.states.setting.success);
   },
 };

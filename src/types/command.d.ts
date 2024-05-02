@@ -4,4 +4,5 @@ interface Command {
   children?: Command[];
   effect?: (command?: string) => any;
   hide?: boolean;
+  main?: boolean;
 }

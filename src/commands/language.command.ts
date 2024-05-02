@@ -1,6 +1,6 @@
 import { useI18n } from "vue-i18n";
 import { defineCommand } from "./creator";
-import { setConsoleDefaultMessageText } from "@/components/terminals/contents/messages/message";
+import { setConsoleDefaultMessage } from "@/components/terminals/contents/messages/message";
 import { setConsoleMatter } from "@/core/matters";
 import { i18nLangModel } from "@/i18n/model";
 
@@ -10,11 +10,11 @@ function toggleLanguage(lang: "zh-cn" | "en-us") {
   setConsoleMatter();
 
   // already in the target state
-  if (locale.value === lang) return setConsoleDefaultMessageText(i18nLangModel.commands.language.switch_fail);
+  if (locale.value === lang) return setConsoleDefaultMessage(i18nLangModel.commands.language.switch_fail);
 
   // toggle state
   locale.value = lang;
-  setConsoleDefaultMessageText({
+  setConsoleDefaultMessage({
     model: i18nLangModel.commands.language.switch_success,
     props: {
       lang: t(i18nLangModel.commands.language.setting.zh_cn.name),

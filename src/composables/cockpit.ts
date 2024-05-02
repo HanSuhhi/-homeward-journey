@@ -33,7 +33,7 @@ export function useInputCheck() {
                 _commands.push(message);
               }
             }
-            return commands.value = [..._commands, createCockpitRunCommandMessage()];
+            return commands.value = [createCockpitRunCommandMessage(), ..._commands];
           }
           if (!command) return commands.value = [createCockpitRunCommandMessage()];
 
@@ -46,18 +46,16 @@ export function useInputCheck() {
               }
             }
 
-            return commands.value = [..._commands, createCockpitRunCommandMessage()];
+            return commands.value = [createCockpitRunCommandMessage(), ..._commands];
           }
-          commands.value = [await createCockpitPickerCommandMessage(command), createCockpitRunCommandMessage()];
+          commands.value = [createCockpitRunCommandMessage(), await createCockpitPickerCommandMessage(command)];
         });
       })
       .then(focusInput);
   }
 
   watchThrottled(inputValue, getCommands, { throttle: 500 });
-  whenever(() => (stateManager.state.value && stateManager.state.value !== GAME_STATE.Init), () => {
-    getCommands();
-  }, { once: true });
+  whenever(() => (stateManager.state.value && stateManager.state.value !== GAME_STATE.Init), getCommands, { once: true });
 
   return { commands };
 }

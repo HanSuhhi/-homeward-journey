@@ -2,7 +2,7 @@ import sleep from "sleep-promise";
 import { stateManager } from "../state";
 import { GAME_STATE } from "../state.enum";
 import { defineState } from "./creator";
-import { setConsoleDefaultMessageText } from "@/components/terminals/contents/messages/message";
+import { setConsoleDefaultMessage } from "@/components/terminals/contents/messages/message";
 import { setTitleMatter } from "@/core/matters";
 import { setMessage } from "@/core/message";
 import { i18nLangModel } from "@/i18n/model";
@@ -46,7 +46,7 @@ export default defineState(({ onEntered }) => {
         },
       ],
     };
-    for (const word of beginWords) setConsoleDefaultMessageText(word);
+    for (const word of beginWords) setConsoleDefaultMessage(word);
     await setMessage(eHkwnY2Xi);
 
     stateManager.switchState(GAME_STATE.Intoxication);

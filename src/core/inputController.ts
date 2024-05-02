@@ -1,16 +1,46 @@
 import { storeToRefs } from "pinia";
-import { onMounted } from "vue";
+import { computed, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
+import { useMagicKeys, whenever } from "@vueuse/core";
 import { useCockpitStore } from "./cockpit";
 import { useInputHistory } from "./inputHistory";
 import { inInputState } from "./inputState";
 import { setInputMatter } from "./matters";
 import { usePickerStore } from "./picker";
-import { focusInput, inputRef, inputValue, inputVisible } from "@/input.store";
+import { focusInput, inputRef, inputValue, inputValueSplits, inputVisible } from "@/input.store";
 import { i18nLangModel } from "@/i18n/model";
 import { inNoCommandInput } from "@/composables/input";
-import { runCommand } from "@/components/terminals/composables/command";
-import { Blank } from "@/i18n/vars";
+import { completeCommand, modifyLastInputCommandSplit, runCommand } from "@/components/terminals/composables/command";
+import { Blank, questionMark } from "@/i18n/vars";
+import { createSingleHelpCommand } from "@/commands/help.command";
+import { i18n } from "@/i18n/locale";
+
+export function watchQuestionMarkDown() {
+  const enterQuestionMark = computed(() => inputValue.value.endsWith(questionMark));
+  async function questionMarkDown() {
+    setInputMatter(inputValue.value);
+
+    await modifyLastInputCommandSplit(async ({ command, fullCommandTxt }) => {
+      const inputSplits = [...inputValueSplits.value];
+      const inputLastSplit = inputSplits.pop();
+
+      inputValue.value = fullCommandTxt;
+
+      if (inputLastSplit === questionMark) {
+        const command = `${inputSplits.join(Blank)} ${i18n.global.t(i18nLangModel.commands.help.name)}`;
+        await runCommand(command);
+      }
+      // ? in the text
+      else {
+        if (!command) inNoCommandInput();
+        if (Array.isArray(command)) await createSingleHelpCommand(command).effect?.();
+        else console.warn("one");
+      }
+    });
+  }
+
+  whenever(enterQuestionMark, questionMarkDown);
+}
 
 export function useInputController() {
   const { inputHistory, setInputHistory } = useInputHistory();
@@ -37,6 +67,7 @@ export function useInputController() {
         })
         .finally(() => {
           if (inInputState.value) inputVisible.value = true;
+          activePickerIndex.value = 0;
         });
     }
 
@@ -45,9 +76,30 @@ export function useInputController() {
     else inputValue.value.substring(0, lastSpaceIndex);
 
     inputValue.value += `${t(model)} `;
+
+    //   const messages = globalMatters[globalMatters.length - 1].messages;
+
+    //   for (let index = messages.length - 1; index >= 0; index--) {
+    //     const { type, classes } = messages[index];
+
+    //     if (unref(type) !== "picker") continue;
+
+    //     if (activePickerIndex.value !== index) {
+    //       setTimeout(() => messages.splice(index, 1), 0);
+    //       continue;
+    //     };
+
+    //     classes!.push(messageTypes.picker_checked);
+
+    //     if (isRef(type)) type.value = "text";
+
+    //     await pickerStore.runPickerEvent();
+    //   }
+
+    //   inputState.value = InputState.Input;
   }
 
-  function ArrorLeft() {
+  function arrowLeft() {
     if (inputHistory.value.length <= index) return index;
 
     index++;
@@ -56,20 +108,20 @@ export function useInputController() {
     focusInput();
   }
 
-  function ArrorRight() {
+  function arrowRight() {
     if (!index) return;
     index--;
     inputValue.value = index ? inputHistory.value[inputHistory.value.length - index] : "";
   }
 
-  function ArrowUp() {
+  function arrowUp() {
     if (!activePickerIndex.value) activePickerIndex.value = total.value - 1;
     else activePickerIndex.value--;
 
     if (inInputState.value) focusInput();
   }
 
-  function ArrowDown() {
+  function arrowDown() {
     if (activePickerIndex.value === total.value - 1) activePickerIndex.value = 0;
     else activePickerIndex.value++;
 
@@ -77,54 +129,12 @@ export function useInputController() {
   }
 
   onMounted(() => {
-    window.onkeydown = async (e) => {
-      switch (e.key) {
-        case "ArrowLeft":
-          e.preventDefault();
-          ArrorLeft();
-          break;
-        case "ArrowRight":
-          e.preventDefault();
-          ArrorRight();
-          break;
-        case "ArrowUp":
-          e.preventDefault();
-          ArrowUp();
-          break;
-        case "ArrowDown":
-          e.preventDefault();
-          ArrowDown();
-          break;
-        case "Enter": {
-          e.preventDefault();
-          enterEvent();
-
-          //   const messages = globalMatters[globalMatters.length - 1].messages;
-
-          //   for (let index = messages.length - 1; index >= 0; index--) {
-          //     const { type, classes } = messages[index];
-
-          //     if (unref(type) !== "picker") continue;
-
-          //     if (activePickerIndex.value !== index) {
-          //       setTimeout(() => messages.splice(index, 1), 0);
-          //       continue;
-          //     };
-
-          //     classes!.push(messageTypes.picker_checked);
-
-          //     if (isRef(type)) type.value = "text";
-
-          //     await pickerStore.runPickerEvent();
-          //   }
-
-          //   inputState.value = InputState.Input;
-          break;
-        }
-
-        default:
-          break;
-      }
-    };
+    const { ArrowLeft, ArrowRight, ArrowUp, ArrowDown, Tab, Enter } = useMagicKeys();
+    whenever(ArrowLeft, arrowLeft);
+    whenever(ArrowRight, arrowRight);
+    whenever(ArrowUp, arrowUp);
+    whenever(ArrowDown, arrowDown);
+    whenever(Tab, completeCommand);
+    whenever(Enter, enterEvent);
   });
 }

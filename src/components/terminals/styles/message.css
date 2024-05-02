@@ -18,3 +18,15 @@
 .message-type_picker_checked {
   text-decoration: underline;
 }
+
+.matter-console>.terminal-message {
+  text-indent: 2em;
+}
+
+.matter-title>.terminal-message {
+  text-indent: 0;
+}
+
+.message-role_ally {
+  color: var(--green-deep-1);
+}
